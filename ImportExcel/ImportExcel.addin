@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<RevitAddIns>
+  <AddIn Type="Command">
+    <Text>Import Room Data</Text>
+    <Description>Import room data from a text file</Description>
+    <Assembly>ImportExcel.dll</Assembly>
+    <FullClassName>ImportExcel.EACommand</FullClassName>
+    <ClientId>1a903a96-76c7-0002-9e50-2418a2549960</ClientId>
+    <VendorId>XXXX</VendorId>
+    <VendorDescription>XXXX</VendorDescription>
+  </AddIn>
+
+</RevitAddIns>

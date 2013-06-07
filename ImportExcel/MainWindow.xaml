@@ -1,0 +1,77 @@
+﻿<Window x:Class="ImportExcel.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:ImportExcel"
+        xmlns:staticData="clr-namespace:ImportExcel"
+        Title="MainWindow" Height="400
+        " Width="800" Icon="e.ico">
+    <Window.Resources>
+        <staticData:ParamList x:Key="ParamList" />
+    </Window.Resources>
+    <Grid>
+        <Button x:Name="btnFile" 
+                Content="File" 
+                Margin="0,0,10,10" 
+                Click="btnFile_Click" 
+                Height="32" 
+                VerticalAlignment="Bottom" 
+                HorizontalAlignment="Right" 
+                Width="90"/>
+        <GroupBox x:Name="groupBox" 
+                  Header="Data" 
+                  Margin="10,10,217,10">
+            <Grid>
+                <DataGrid x:Name="programGrid" 
+                          Margin="0,10,0,0" 
+                          ColumnHeaderHeight="24" 
+                          RowHeight="24"/>
+            </Grid>
+        </GroupBox>
+        <Button x:Name="btnRoom" 
+                Content="Import" 
+                Margin="0,0,105,10" 
+                Click="btnRoom_Click" 
+                Height="32" 
+                VerticalAlignment="Bottom" 
+                HorizontalAlignment="Right" 
+                Width="90"/>
+        <GroupBox Header="Parameter Mapping" 
+                  Margin="0,10,10,70" 
+                  HorizontalAlignment="Right" 
+                  Width="185">
+            <Grid>
+                <DataGrid x:Name="paramGrid" 
+                          Margin="0,10,0,0" 
+                          AutoGenerateColumns="False" 
+                          ColumnHeaderHeight="24" 
+                          RowHeight="24" 
+                          HeadersVisibility="Column" 
+                          Foreground="Black" 
+                          GridLinesVisibility="Horizontal" 
+                          HorizontalGridLinesBrush="Black">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Param}"  
+                                            Header="Column" 
+                                            Width="85"/>
+                        <DataGridTemplateColumn Header="Mapping" 
+                                                Width="85" 
+                                                x:Name="comboParam">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox ItemsSource="{StaticResource ParamList}" 
+                                              SelectionChanged="ComboBox_SelectionChanged" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <ComboBox ItemsSource="{StaticResource ParamList}"  />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </GroupBox>
+
+    </Grid>
+</Window>
