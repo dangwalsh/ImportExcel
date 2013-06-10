@@ -19,10 +19,21 @@ namespace ImportExcel
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        public Room CreateRoom(Phase p)
+        static public Room CreateRoom(Phase p)
         {
             Room room = EADocument.Doc.Create.NewRoom(p);
             return room;
+        }
+
+        /// <summary>
+        /// Method that creates a phase object equal to the last phase in the active document
+        /// </summary>
+        /// <returns></returns>
+        static public Phase CreatePhase()
+        {
+            PhaseArray phases = EADocument.Doc.Phases;
+            int n = phases.Size;
+            return phases.get_Item(n - 1);          
         }
 
         /// <summary>
@@ -32,10 +43,7 @@ namespace ImportExcel
         {
             try
             {
-                PhaseArray phases = EADocument.Doc.Phases;
-                int n = phases.Size;
-                Phase phase = phases.get_Item(n - 1);
-
+                Phase phase = CreatePhase();
                 Transaction t = new Transaction(EADocument.Doc, "Create Rooms");
                 if (t.Start() == TransactionStatus.Started)
                 {
@@ -48,14 +56,14 @@ namespace ImportExcel
                             {
                                 for (int i = 0; i < s; ++i)
                                 {
-                                    Room room = this.CreateRoom(phase);
+                                    Room room = CreateRoom(phase);
                                     room.Name = row[EAData.ParamDict["Name"]].ToString();
                                 }
                             }
-                            else
-                            {
-                                throw new CountFailedException("Failed to access room count");
-                            }
+                            //else
+                            //{
+                            //    //throw new CountFailedException("Failed to access room count");
+                            //}
                         }
                     }
                     t.Commit();

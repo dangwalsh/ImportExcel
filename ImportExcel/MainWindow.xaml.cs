@@ -103,7 +103,13 @@ namespace ImportExcel
         public ParamList()
         {
             this.Add("Count");
-            GetRooms();
+            Transaction t = new Transaction(EADocument.Doc, "Make Temp Room");
+            if (t.Start() == TransactionStatus.Started)
+            {
+                EARoomFactory.CreateRoom(EARoomFactory.CreatePhase());
+                GetRooms();
+            }
+            t.RollBack();
         }
 
         /// <summary>

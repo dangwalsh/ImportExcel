@@ -25,7 +25,7 @@ namespace ImportExcel
             {
                 EADocument ea = new EADocument(elements, commandData);
                 MainWindow mw = new MainWindow();
-                mw.ShowDialog();
+                mw.ShowDialog();                
                 return Result.Succeeded;
             }
             catch (Exception ex)
