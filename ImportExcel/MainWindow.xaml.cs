@@ -90,7 +90,6 @@ namespace ImportExcel
             {
                 DataRow row = rowView.Row;
                 string s = row["Param"].ToString();
-                MessageBox.Show(s);
                 EAData.ParamDict.Add(p, row.ItemArray[0].ToString());
             }
         }
