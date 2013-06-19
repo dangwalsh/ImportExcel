@@ -10,16 +10,16 @@ using Autodesk.Revit.UI;
 
 namespace ImportExcel
 {
-    class EAData
+    class EAFileData
     {
         private string _path;
         private string _name;
-        static private DataTable _table;
+        static private DataTable _roomTable;
         static private DataTable _paramTable;
-        static private Dictionary<string, string> _paramDict;
+        static private Dictionary<string, string> _mapDict;
 
         /// <summary>
-        /// 
+        /// Data member for file path
         /// </summary>
         public string Path
         {
@@ -28,7 +28,7 @@ namespace ImportExcel
         }
 
         /// <summary>
-        /// 
+        /// Data member for table name
         /// </summary>
         public string Name
         {
@@ -36,16 +36,16 @@ namespace ImportExcel
         }
 
         /// <summary>
-        /// 
+        /// Data member for room DataTable
         /// </summary>
-        static public DataTable Table
+        static public DataTable RoomTable
         {
-            get { return _table; }
-            set { _table = value; }
+            get { return _roomTable; }
+            set { _roomTable = value; }
         }
 
         /// <summary>
-        /// 
+        /// Data memeber for parameter DataTable
         /// </summary>
         static public DataTable ParamTable
         {
@@ -53,24 +53,27 @@ namespace ImportExcel
             set { _paramTable = value; }
         }
 
-        static public Dictionary<string, string> ParamDict
+        /// <summary>
+        /// Data member for mapping table columns to Revit parameters
+        /// </summary>
+        static public Dictionary<string, string> MapDict
         {
-            get { return _paramDict; }
-            set { _paramDict = value; }
+            get { return _mapDict; }
+            set { _mapDict = value; }
         }
         
         /// <summary>
-        /// 
+        /// Constructor
         /// </summary>
         /// <param name="p"></param>
-        public EAData(string p)
+        public EAFileData(string p)
         {
             _path = p;
             this.Parse();
         }
 
         /// <summary>
-        /// 
+        /// Method that reads the text file and builds datatables for datagrids
         /// </summary>
         public void Parse()
         {
@@ -96,37 +99,37 @@ namespace ImportExcel
                         continue;
                     }
 
-                    if (null == _table)
+                    if (null == _roomTable)
                     {
-                        _table = new DataTable();
+                        _roomTable = new DataTable();
                         _paramTable = new DataTable();
-                        _paramDict = new Dictionary<string,string>();
+                        _mapDict = new Dictionary<string,string>();
 
                         DataColumn col = new DataColumn();
                         col.DataType = typeof(string);
                         col.ColumnName = "Param";
                         _paramTable.Columns.Add(col);
                         _paramTable.BeginLoadData();
-
-                        
+                     
                         foreach (string column_name in a)
                         {
                             DataColumn column = new DataColumn();
                             column.DataType = typeof(string);
                             column.ColumnName = column_name;
-                            _table.Columns.Add(column);
+                            _roomTable.Columns.Add(column);
 
                             string[] da = { column_name };
                             DataRow d = _paramTable.LoadDataRow(da, true);
                         }
+
                         _paramTable.EndLoadData();
-                        _table.BeginLoadData();
+                        _roomTable.BeginLoadData();
                         continue;
                     }                    
-
-                    DataRow dr = _table.LoadDataRow(a, true);
+                    DataRow dr = _roomTable.LoadDataRow(a, true);
                 }
-                _table.EndLoadData();
+                _roomTable.EndLoadData();
+                stream.Close();
             }
 
             catch (Exception ex)

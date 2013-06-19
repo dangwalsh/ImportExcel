@@ -24,7 +24,7 @@ namespace ImportExcel
     /// </summary>
     public partial class MainWindow : Window
     {
-        private EAData _data;
+        private EAFileData _data;
         public MainWindow()
         {
             InitializeComponent();
@@ -48,10 +48,10 @@ namespace ImportExcel
 
                 if (dlg.ShowDialog() == true)
                 {
-                    _data = new EAData(dlg.FileName);
+                    _data = new EAFileData(dlg.FileName);
                     this.groupBox.Header = _data.Name;
-                    this.programGrid.ItemsSource = EAData.Table.AsDataView();
-                    this.paramGrid.ItemsSource = EAData.ParamTable.AsDataView();
+                    this.programGrid.ItemsSource = EAFileData.RoomTable.AsDataView();
+                    this.paramGrid.ItemsSource = EAFileData.ParamTable.AsDataView();
                 }
                 else
                 {
@@ -72,8 +72,10 @@ namespace ImportExcel
         /// <param name="e"></param>
         private void btnRoom_Click(object sender, RoutedEventArgs e)
         {
-            EARoomFactory factory = new EARoomFactory();
+            EAFactory factory = new EAFactory();
             factory.CreateRooms();
+            Autodesk.Revit.UI.TaskDialog.Show("Success", "Successfully imported room data!");
+            this.Close();
         }
 
         /// <summary>
@@ -83,6 +85,9 @@ namespace ImportExcel
         /// <param name="e"></param>
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+
+            // TODO: Must add ability to remove Dictionary entry if user deselects parameter mapping
+
             ComboBox temp = (ComboBox)sender;
             string p = temp.SelectedItem.ToString();
             DataRowView rowView = paramGrid.SelectedItem as DataRowView;
@@ -90,7 +95,7 @@ namespace ImportExcel
             {
                 DataRow row = rowView.Row;
                 string s = row["Param"].ToString();
-                EAData.ParamDict.Add(p, row.ItemArray[0].ToString());
+                EAFileData.MapDict.Add(p, row.ItemArray[0].ToString());
             }
         }
     }
@@ -103,13 +108,20 @@ namespace ImportExcel
         public ParamList()
         {
             this.Add("Count");
-            Transaction t = new Transaction(EADocument.Doc, "Make Temp Room");
+            Transaction t = new Transaction(EADocumentData.Doc, "Make Temp Room");
             if (t.Start() == TransactionStatus.Started)
             {
-                EARoomFactory.CreateRoom(EARoomFactory.CreatePhase());
+                EAFactory.CreateRoom(EAFactory.CreatePhase());
                 GetRooms();
             }
             t.RollBack();
+
+            foreach (string name in EASharedParamData.SharedParamNames)
+            {
+                this.Add(name);
+            }
+
+            this.Sort();
         }
 
         /// <summary>
@@ -117,7 +129,7 @@ namespace ImportExcel
         /// </summary>
         private void GetRooms()
         {
-            FilteredElementCollector collector = new FilteredElementCollector(EADocument.Doc);
+            FilteredElementCollector collector = new FilteredElementCollector(EADocumentData.Doc);
             List<Element> rooms = new List<Element>();
             rooms = collector.OfCategory(BuiltInCategory.OST_Rooms).ToList();
 
@@ -139,5 +151,6 @@ namespace ImportExcel
                 this.Add(param.Definition.Name);
             }
         }
+
     }
 }

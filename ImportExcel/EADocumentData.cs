@@ -11,17 +11,26 @@ using Autodesk.Revit.ApplicationServices;
 
 namespace ImportExcel
 {
-    class EADocument
+    class EADocumentData
     {
         static private ElementSet _elements;
         static private ExternalCommandData _commandData;
+
+
+        /// <summary>
+        /// Accessor for the Revit UIApplication frame
+        /// </summary>
+        static public UIApplication UiApp
+        {
+            get { return _commandData.Application; }
+        }
 
         /// <summary>
         /// Accessor for the Revit Document object
         /// </summary>
         static public Document Doc
         {
-            get { return _commandData.Application.ActiveUIDocument.Document; }
+            get { return UiApp.ActiveUIDocument.Document; }
         }
 
         /// <summary>
@@ -29,7 +38,7 @@ namespace ImportExcel
         /// </summary>
         static public Application App
         {
-            get { return _commandData.Application.Application; }
+            get { return UiApp.Application; }
         }
 
         /// <summary>
@@ -37,7 +46,7 @@ namespace ImportExcel
         /// </summary>
         /// <param name="e"></param>
         /// <param name="d"></param>
-        public EADocument(ElementSet e, ExternalCommandData d)
+        public EADocumentData(ElementSet e, ExternalCommandData d)
         {
             _elements = e;
             _commandData = d;

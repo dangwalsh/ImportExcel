@@ -23,7 +23,10 @@ namespace ImportExcel
         {
             try
             {
-                EADocument ea = new EADocument(elements, commandData);
+                
+                EADocumentData eadd = new EADocumentData(elements, commandData);
+                EASharedParamData easp = new EASharedParamData("Rooms");
+                //easp.SetNewParameterToTypeRoom("Display");
                 MainWindow mw = new MainWindow();
                 mw.ShowDialog();                
                 return Result.Succeeded;

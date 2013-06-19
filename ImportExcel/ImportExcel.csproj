@@ -70,17 +70,16 @@
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="EACommand.cs" />
-    <Compile Include="EADocument.cs" />
-    <Compile Include="EAParameterFactory.cs" />
-    <Compile Include="EARoomFactory.cs" />
-    <Compile Include="EAData.cs" />
+    <Compile Include="EADocumentData.cs" />
+    <Compile Include="EAFactory.cs" />
+    <Compile Include="EAFileData.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EAParameterBinding.cs" />
+    <Compile Include="EASharedParamData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
