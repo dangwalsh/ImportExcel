@@ -39,8 +39,9 @@ namespace ImportExcel
         /// <summary>
         /// Method that creates transaction calls room creation and commits to DB
         /// </summary>
-        public void CreateRooms()
+        public int CreateRooms()
         {
+            int roomCount = 0;
             try
             {
                 Phase phase = CreatePhase();
@@ -54,31 +55,24 @@ namespace ImportExcel
                             short s = 0;
                             if (Int16.TryParse(row[EAFileData.MapDict["Count"]].ToString(), out s))
                             {
-                                //EAFileData.MapDict.Remove("Count");
                                 for (int i = 0; i < s; ++i)
                                 {
                                     Room room = CreateRoom(phase);
                                     room.Name = row[EAFileData.MapDict["Name"]].ToString();
-                                    //EAFileData.MapDict.Remove("Name");
                                     ParamFactory(room as Element, row);
+                                    ++roomCount;
                                 }
                             }
-                            //else
-                            //{
-                            //    //throw new CountFailedException("Failed to access room count");
-                            //}
                         }
                     }
                     t.Commit();
                 }
+                return roomCount;
             }
-            //catch (CountFailedException ex)
-            //{
-            //    TaskDialog.Show("Count Failure", ex.Message);
-            //}
             catch (Exception ex)
             {
                 TaskDialog.Show("Error", ex.Message);
+                return roomCount;
             }
         }
 
@@ -90,7 +84,7 @@ namespace ImportExcel
         {
             foreach (KeyValuePair<string, string> usrParam in EAFileData.MapDict)
             {
-                if (usrParam.Key == "Count" || usrParam.Key == "Name")
+                if (usrParam.Key == "Count" || usrParam.Key == "Name" || usrParam.Key == "")
                     continue;
 
                 bool match = false;
@@ -129,7 +123,7 @@ namespace ImportExcel
                     Category roomCat = EADocumentData.Doc.Settings.Categories.get_Item(BuiltInCategory.OST_Rooms);
                     CategorySet catSet = new CategorySet();
                     catSet.Insert(roomCat);
-                    EASharedParamData.RawCreateProjectParameterFromExistingSharedParameter(usrParam.Key, 
+                    EASharedParamData.CreateProjParamFromExistSharedParam(usrParam.Key, 
                                                                                            catSet, 
                                                                                            BuiltInParameterGroup.PG_IDENTITY_DATA, 
                                                                                            true

@@ -81,4 +81,24 @@ namespace ImportExcel
         {
         }
     }
+
+    /// <summary>
+    /// Custom parameter name exception
+    /// </summary>
+    public class InvalidNameException : Exception
+    {
+        public InvalidNameException()
+        {
+        }
+
+        public InvalidNameException(string message)
+            : base(message)
+        {
+        }
+
+        public InvalidNameException(string message, Exception inner)
+            : base(message, inner)
+        {
+        }
+    }
 }

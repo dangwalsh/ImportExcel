@@ -25,6 +25,7 @@ namespace ImportExcel
     public partial class MainWindow : Window
     {
         private EAFileData _data;
+        private string _oldParam;
         public MainWindow()
         {
             InitializeComponent();
@@ -66,37 +67,56 @@ namespace ImportExcel
         }
 
         /// <summary>
-        /// Import button event handler
+        /// Room creation button event handler
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btnRoom_Click(object sender, RoutedEventArgs e)
         {
             EAFactory factory = new EAFactory();
-            factory.CreateRooms();
-            Autodesk.Revit.UI.TaskDialog.Show("Success", "Successfully imported room data!");
+            int r = factory.CreateRooms();
+            Autodesk.Revit.UI.TaskDialog.Show("Success", "Successfully created " + r + " rooms!");
             this.Close();
         }
 
         /// <summary>
-        /// 
+        /// Combobox selection event handler, store param name pair in ParamDict
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
-            // TODO: Must add ability to remove Dictionary entry if user deselects parameter mapping
-
+            if (_oldParam != null)
+            {
+                EAFileData.MapDict.Remove(_oldParam);
+            }
             ComboBox temp = (ComboBox)sender;
             string p = temp.SelectedItem.ToString();
-            DataRowView rowView = paramGrid.SelectedItem as DataRowView;
-            if (rowView != null)
+            if (p != "")
             {
-                DataRow row = rowView.Row;
-                string s = row["Param"].ToString();
-                EAFileData.MapDict.Add(p, row.ItemArray[0].ToString());
+                DataRowView rowView = paramGrid.SelectedItem as DataRowView;
+                if (rowView != null)
+                {
+                    DataRow row = rowView.Row;
+                    string s = row["Param"].ToString();
+                    EAFileData.MapDict.Add(p, row.ItemArray[0].ToString());
+                }
             }
+        }
+
+        /// <summary>
+        /// Combobox dropdown event handler, store current selection in temp variable
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ComboBox_DropDownOpened(object sender, EventArgs e)
+        {
+            ComboBox temp = (ComboBox)sender;           
+            if (temp.SelectedItem != null)
+            {
+                _oldParam = temp.SelectedItem.ToString();
+            }
+           
         }
     }
 
@@ -107,6 +127,7 @@ namespace ImportExcel
         /// </summary>
         public ParamList()
         {
+            this.Add("");
             this.Add("Count");
             Transaction t = new Transaction(EADocumentData.Doc, "Make Temp Room");
             if (t.Start() == TransactionStatus.Started)

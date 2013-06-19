@@ -3,23 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:ImportExcel"
         xmlns:staticData="clr-namespace:ImportExcel"
-        Title="MainWindow" Height="400
-        " Width="800" Icon="e.ico">
+        Title="MainWindow" Height="400         " Width="825" Icon="e.ico">
     <Window.Resources>
         <staticData:ParamList x:Key="ParamList" />
     </Window.Resources>
     <Grid>
-        <Button x:Name="btnFile" 
-                Content="File" 
-                Margin="0,0,10,10" 
-                Click="btnFile_Click" 
-                Height="32" 
-                VerticalAlignment="Bottom" 
-                HorizontalAlignment="Right" 
-                Width="90"/>
         <GroupBox x:Name="groupBox" 
                   Header="Data" 
-                  Margin="10,10,217,10">
+                  Margin="10,10,249,10">
             <Grid>
                 <DataGrid x:Name="programGrid" 
                           Margin="0,10,0,0" 
@@ -27,21 +18,13 @@
                           RowHeight="24"/>
             </Grid>
         </GroupBox>
-        <Button x:Name="btnRoom" 
-                Content="Import" 
-                Margin="0,0,105,10" 
-                Click="btnRoom_Click" 
-                Height="32" 
-                VerticalAlignment="Bottom" 
-                HorizontalAlignment="Right" 
-                Width="90"/>
         <GroupBox Header="Parameter Mapping" 
-                  Margin="0,10,10,70" 
+                  Margin="0,10,10,10" 
                   HorizontalAlignment="Right" 
-                  Width="185">
+                  Width="223">
             <Grid>
                 <DataGrid x:Name="paramGrid" 
-                          Margin="0,10,0,0" 
+                          Margin="0,10,0,37" 
                           AutoGenerateColumns="False" 
                           ColumnHeaderHeight="24" 
                           RowHeight="24" 
@@ -52,14 +35,14 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding Param}"  
                                             Header="Column" 
-                                            Width="85"/>
+                                            Width="104"/>
                         <DataGridTemplateColumn Header="Mapping" 
-                                                Width="85" 
+                                                Width="105" 
                                                 x:Name="comboParam">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <ComboBox ItemsSource="{StaticResource ParamList}" 
-                                              SelectionChanged="ComboBox_SelectionChanged" />
+                                              SelectionChanged="ComboBox_SelectionChanged" DropDownOpened="ComboBox_DropDownOpened" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                             <DataGridTemplateColumn.CellEditingTemplate>
@@ -70,6 +53,21 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
+                <Button x:Name="btnRoom" 
+                	Content="Import" 
+                	Margin="0,0,108,0" 
+                	Click="btnRoom_Click" 
+                	Height="32" 
+                	VerticalAlignment="Bottom" 
+                	HorizontalAlignment="Right" 
+                	Width="103"/>
+                <Button x:Name="btnFile" 
+                	Content="File" 
+                	Click="btnFile_Click" 
+                	Height="32" 
+                	VerticalAlignment="Bottom" 
+                	HorizontalAlignment="Right" 
+                	Width="103"/>
             </Grid>
         </GroupBox>
 
