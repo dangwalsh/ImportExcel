@@ -23,7 +23,6 @@ namespace ImportExcel
         {
             try
             {
-                
                 EADocumentData eadd = new EADocumentData(elements, commandData);
                 EASharedParamData easp = new EASharedParamData("Rooms");
                 //easp.SetNewParameterToTypeRoom("Display");
@@ -97,6 +96,26 @@ namespace ImportExcel
         }
 
         public InvalidNameException(string message, Exception inner)
+            : base(message, inner)
+        {
+        }
+    }
+
+    /// <summary>
+    /// Custom room deletion exception
+    /// </summary>
+    public class AbortCommandException : Exception
+    {
+        public AbortCommandException()
+        {
+        }
+
+        public AbortCommandException(string message)
+            : base(message)
+        {
+        }
+
+        public AbortCommandException(string message, Exception inner)
             : base(message, inner)
         {
         }

@@ -25,6 +25,7 @@ namespace ImportExcel
         static public List<string> SharedParamNames
         {
             get { return _sharedParamNames; }
+
         }
 
         /// <summary>
@@ -34,6 +35,10 @@ namespace ImportExcel
         public EASharedParamData(string groupName)
         {
             _groupName = groupName;
+            if (_sharedParamNames.Count > 0)
+            {
+                _sharedParamNames.Clear();
+            }
             if (LoadSharedParameterFromFile(out _doesExist) && _doesExist)
             {
                 GetSharedParameterList();

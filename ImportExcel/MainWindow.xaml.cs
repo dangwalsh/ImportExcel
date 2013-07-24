@@ -73,10 +73,26 @@ namespace ImportExcel
         /// <param name="e"></param>
         private void btnRoom_Click(object sender, RoutedEventArgs e)
         {
-            EAFactory factory = new EAFactory();
-            int r = factory.CreateRooms();
-            Autodesk.Revit.UI.TaskDialog.Show("Success", "Successfully created " + r + " rooms!");
-            this.Close();
+            Transaction t = new Transaction(EADocumentData.Doc, "Delete Old Rooms");
+            try
+            {
+                if (t.Start() == TransactionStatus.Started)
+                {
+                    DeleteRooms();
+                }
+                t.Commit();
+
+                EAFactory factory = new EAFactory();
+                int r = factory.CreateRooms();
+                Autodesk.Revit.UI.TaskDialog.Show("Success", "Successfully created " + r + " rooms!");
+                this.Close();
+            }
+            catch (AbortCommandException ex)
+            {
+                Autodesk.Revit.UI.TaskDialog.Show("Warning", "Command Aborted");
+                t.RollBack();
+                this.Close();
+            }
         }
 
         /// <summary>
@@ -119,6 +135,38 @@ namespace ImportExcel
            
         }
 
+        /// <summary>
+        /// Iterate and delelte existing rooms in database
+        /// </summary>
+        private void DeleteRooms()
+        {
+            Autodesk.Revit.UI.TaskDialog dialog = new Autodesk.Revit.UI.TaskDialog("Warning");
+            dialog.MainInstruction = "Warning!";
+            dialog.MainContent = "About to replace all rooms in the database.";
+            dialog.AddCommandLink(Autodesk.Revit.UI.TaskDialogCommandLinkId.CommandLink1, "Continue");
+            dialog.AddCommandLink(Autodesk.Revit.UI.TaskDialogCommandLinkId.CommandLink2, "Abort");
+            dialog.CommonButtons = Autodesk.Revit.UI.TaskDialogCommonButtons.None;
+            dialog.DefaultButton = Autodesk.Revit.UI.TaskDialogResult.None;
+
+            Autodesk.Revit.UI.TaskDialogResult result = dialog.Show();
+            if (result == Autodesk.Revit.UI.TaskDialogResult.CommandLink1)
+            {
+                FilteredElementCollector collector = new FilteredElementCollector(EADocumentData.Doc);
+                List<Element> rooms = new List<Element>();
+                rooms = collector.OfCategory(BuiltInCategory.OST_Rooms).ToList();
+
+                foreach (Element e in rooms)
+                {
+                    ElementId elementId = e.Id;
+                    ICollection<Autodesk.Revit.DB.ElementId> deletedIdSet = EADocumentData.Doc.Delete(elementId);
+                }
+            }
+            else
+            {
+                throw new AbortCommandException("Command Aborted");
+            }
+        }
+
     }
 
     public class ParamList : List<string>
@@ -130,6 +178,7 @@ namespace ImportExcel
         {
             this.Add("");
             this.Add("Count");
+
             Transaction t = new Transaction(EADocumentData.Doc, "Make Temp Room");
             if (t.Start() == TransactionStatus.Started)
             {
@@ -144,6 +193,7 @@ namespace ImportExcel
             }
 
             this.Sort();
+            
         }
 
         /// <summary>

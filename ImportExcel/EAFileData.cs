@@ -68,6 +68,8 @@ namespace ImportExcel
         /// <param name="p"></param>
         public EAFileData(string p)
         {
+            if(_roomTable != null) _roomTable.Clear();
+            //if(_paramTable != null) _paramTable.Clear();
             _path = p;
             this.Parse();
         }
@@ -84,7 +86,7 @@ namespace ImportExcel
                 string line;
                 string[] a;
                 char delim = '\t';
-                char[] c = { '.', '"', '\'' };
+                char[] c = { '.', '"', '\'' };  //TODO test if removing the '.' char from the list fixes data column problems with periods in the name
 
                 while (null != (line = stream.ReadLine()))
                 {
