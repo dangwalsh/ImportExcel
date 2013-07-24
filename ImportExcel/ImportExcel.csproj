@@ -113,7 +113,9 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(ProjectDir)ImportExcel.addin" "$(AppData)\Autodesk\REVIT\Addins\2014"
-copy "$(ProjectDir)bin\debug\ImportExcel.dll" "$(AppData)\Autodesk\REVIT\Addins\2014"</PostBuildEvent>
+copy "$(ProjectDir)bin\debug\ImportExcel.dll" "$(AppData)\Autodesk\REVIT\Addins\2014"
+copy "$(ProjectDir)ImportExcel.addin" "\\fs03.ad.ennead.com\library\4_Revit\Development\addin"
+copy "$(ProjectDir)bin\debug\ImportExcel.dll" "\\fs03.ad.ennead.com\library\4_Revit\Development\bin"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

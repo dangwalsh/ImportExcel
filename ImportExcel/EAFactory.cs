@@ -166,6 +166,7 @@ namespace ImportExcel
         ~EAFactory()
         {
             EAFileData.RoomTable = null;
+            EAFileData.ParamTable.Clear();
         }
     }
 }

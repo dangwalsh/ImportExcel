@@ -118,6 +118,7 @@ namespace ImportExcel
             }
            
         }
+
     }
 
     public class ParamList : List<string>
@@ -173,5 +174,9 @@ namespace ImportExcel
             }
         }
 
+        ~ParamList()
+        {
+            this.Clear();
+        }
     }
 }
